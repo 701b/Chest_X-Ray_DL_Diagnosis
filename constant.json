@@ -1,0 +1,6 @@
+{
+  "ModelPath": "xray_weights.best.h5",
+  "ImageSize": [256, 256],
+  "LabelList": ["Atelectasis", "Effusion", "Mass", "Nodule", "Pneumonia", "Pneumothorax"],
+  "OldLabelList": ["Atelectasis", "Cardiomegaly", "Consolidation", "Edema", "Effusion", "Emphysema", "Fibrosis", "Infiltration", "Mass", "Nodule", "Pleural_Thickening", "Pneumonia", "Pneumothorax"]
+}
