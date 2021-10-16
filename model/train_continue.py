@@ -22,7 +22,7 @@ with open('constant.json', 'r') as const_json:
     LABEL_LIST = const_dict['LabelList']
 
 # DataFrame 구성하기
-xray_df = pd.read_csv('./archive/Data_Entry_2017.csv')
+xray_df = pd.read_csv('archive/Data_Entry_2017.csv')
 
 image_path_dict = {os.path.basename(x): x for x in glob(os.path.join('archive', 'filtered_normalized_images', '*.png'))}
 xray_df[IMAGE_PATH_COL] = xray_df['Image Index'].map(image_path_dict.get)

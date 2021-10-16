@@ -29,7 +29,7 @@ with open('constant.json', 'r') as const_json:
     LABEL_LIST = const_dict['LabelList']
 
 # DataFrame 구성하기
-xray_df = pd.read_csv('./archive/Data_Entry_2017.csv')
+xray_df = pd.read_csv('archive/Data_Entry_2017.csv')
 
 image_path_dict = {os.path.basename(x): x for x in glob(os.path.join('archive', 'filtered_normalized_images', '*.png'))}
 xray_df[IMAGE_PATH_COL] = xray_df['Image Index'].map(image_path_dict.get)
@@ -123,7 +123,10 @@ fig, c_ax = plt.subplots(1, 1, figsize=(9, 9))
 for (idx, c_label) in enumerate(LABEL_LIST):
     fpr, tpr, thresholds = roc_curve(test_Y[:, idx].astype(int), pred_Y[:, idx])
     c_ax.plot(fpr, tpr, label='%s (AUC:%0.2f)' % (c_label, auc(fpr, tpr)))
+    print(f"{c_label}: {thresholds} : {tpr} : {fpr}")
 c_ax.legend()
 c_ax.set_xlabel('False Positive Rate')
 c_ax.set_ylabel('True Positive Rate')
 fig.savefig('trained_net.png')
+
+print(pred_Y)

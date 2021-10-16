@@ -37,7 +37,7 @@ IMG_SIZE = (128, 128)
 MODEL_PATH = 'xray_weights.densenet.h5'
 
 # csv 파일로부터 xray 이미지 정보 가져오기
-xray_df = pd.read_csv('./archive/Data_Entry_2017.csv')
+xray_df = pd.read_csv('archive/Data_Entry_2017.csv')
 
 # df에 이미지 경로 포함시키기
 image_path_dict = {os.path.basename(x): x for x in glob(os.path.join('archive', 'images*', 'images', '*.png'))}

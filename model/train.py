@@ -18,7 +18,7 @@ from keras_preprocessing.image import ImageDataGenerator
 from sklearn.metrics import roc_curve, auc
 from sklearn.model_selection import train_test_split
 
-MODEL = 'MobileNet'
+MODEL = 'DenseNet'
 IMAGE_PATH_COL = 'Image Path'
 
 with open('constant.json', 'r') as const_json:
@@ -29,7 +29,7 @@ with open('constant.json', 'r') as const_json:
     LABEL_LIST = const_dict['LabelList']
 
 # DataFrame 구성하기
-xray_df = pd.read_csv('./archive/Data_Entry_2017.csv')
+xray_df = pd.read_csv('archive/Data_Entry_2017.csv')
 
 image_path_dict = {os.path.basename(x): x for x in glob(os.path.join('archive', 'filtered_normalized_images', '*.png'))}
 xray_df[IMAGE_PATH_COL] = xray_df['Image Index'].map(image_path_dict.get)
@@ -77,8 +77,7 @@ image_data_generator = ImageDataGenerator(samplewise_center=True,
                                           vertical_flip=False,
                                           rotation_range=5,
                                           shear_range=0.1,
-                                          fill_mode='constant',
-                                          cval=0,
+                                          fill_mode='reflect',
                                           zoom_range=0.15,
                                           brightness_range=(0.8, 1.2))
 
@@ -128,7 +127,6 @@ multi_disease_model.add(GlobalAveragePooling2D())
 multi_disease_model.add(Dropout(0.3))
 multi_disease_model.add(Dense(len(LABEL_LIST), activation='sigmoid'))
 multi_disease_model.compile(optimizer='adam', loss='binary_crossentropy', metrics=[AUC(multi_label=True)])
-multi_disease_model.summary()
 
 # callback 정의
 rlr = ReduceLROnPlateau(monitor='val_loss',
@@ -173,6 +171,7 @@ fig, c_ax = plt.subplots(1, 1, figsize=(9, 9))
 for (idx, c_label) in enumerate(LABEL_LIST):
     fpr, tpr, thresholds = roc_curve(test_Y[:, idx].astype(int), pred_Y[:, idx])
     c_ax.plot(fpr, tpr, label='%s (AUC:%0.2f)' % (c_label, auc(fpr, tpr)))
+    print(f"{c_label}: {thresholds} : {tpr} : {fpr}")
 c_ax.legend()
 c_ax.set_xlabel('False Positive Rate')
 c_ax.set_ylabel('True Positive Rate')
