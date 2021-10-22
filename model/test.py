@@ -57,13 +57,6 @@ LABEL_LIST.append('Mass / Nodule')
 # sample_weights /= sample_weights.sum()
 # xray_df = xray_df.sample(65000, weights=sample_weights)
 
-label_counts = xray_df['Finding Labels'].value_counts()[:15]
-fig, ax1 = plt.subplots(1, 1, figsize=(12, 8))
-ax1.bar(np.arange(len(label_counts)) + 0.5, label_counts)
-ax1.set_xticks(np.arange(len(label_counts)) + 0.5)
-_ = ax1.set_xticklabels(label_counts.index, rotation=90)
-plt.show()
-
 # 데이터 나누기
 train_df, valid_and_test_df = train_test_split(xray_df, test_size=0.3, random_state=7015)
 valid_df, test_df = train_test_split(valid_and_test_df, test_size=0.5, random_state=7015)
@@ -120,10 +113,33 @@ multi_disease_model = load_model(MODEL_PATH)
 pred_Y = multi_disease_model.predict(test_X, batch_size=32, verbose=True)
 
 fig, c_ax = plt.subplots(1, 1, figsize=(9, 9))
+
+
+proper_thresholds = {}
+
 for (idx, c_label) in enumerate(LABEL_LIST):
     fpr, tpr, thresholds = roc_curve(test_Y[:, idx].astype(int), pred_Y[:, idx])
     c_ax.plot(fpr, tpr, label='%s (AUC:%0.2f)' % (c_label, auc(fpr, tpr)))
-    print(f"{c_label}: {thresholds} : {tpr} : {fpr}")
+
+    max_j = 0
+    thresholds_at_max = 0
+    
+    print(fpr[0:20])
+    print(tpr[0:20])
+    
+    for (index, value) in enumerate(fpr):
+        print(f"{type(fpr[index])}")
+        print(f"{fpr[index]}")
+        print(f"{type(tpr[index])}")
+        print(f"{tpr[index]}")
+        if tpr[index] - fpr[index] > max_j:
+            max_j = tpr - fpr
+            thresholds_at_max = thresholds[index]
+    
+    proper_thresholds[c_label] = thresholds_at_max
+
+print(proper_thresholds)
+        
 c_ax.legend()
 c_ax.set_xlabel('False Positive Rate')
 c_ax.set_ylabel('True Positive Rate')

@@ -13,12 +13,20 @@ to assist the reading doctor.
 npm install
 ```
 
-### Compiles and minifies for production
+### Run vue.js server
 ```
-npm run build
+npm run serve
 ```
 
 ### Run node.js server
 ```
 npm start
 ```
+
+### Download model weight
+https://drive.google.com/file/d/1-rGWSM2ucp6EHWfCJgZqMzsTrrTHa6LD/view?usp=sharing
+
+Download the file and put it in the ```model/``` path.
+
+### Enter to web
+http://localhost:8080

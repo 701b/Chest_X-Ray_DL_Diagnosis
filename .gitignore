@@ -157,4 +157,12 @@ pnpm-debug.log*
 
 #custom
 archive/
+<<<<<<< HEAD
 *.h5
+
+saved_model/
+result/
+uploads/
+=======
+*.h5
+>>>>>>> parent of dca2310 (remove unused file and upload model weight)

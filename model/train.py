@@ -7,6 +7,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 from keras.applications.densenet import DenseNet121
+from keras.applications.inception_v3 import InceptionV3
 from keras.applications.mobilenet import MobileNet
 from keras.applications.resnet import ResNet50
 from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
@@ -18,7 +19,7 @@ from keras_preprocessing.image import ImageDataGenerator
 from sklearn.metrics import roc_curve, auc
 from sklearn.model_selection import train_test_split
 
-MODEL = 'DenseNet'
+MODEL = 'InceptionV3'
 IMAGE_PATH_COL = 'Image Path'
 
 with open('constant.json', 'r') as const_json:
@@ -58,13 +59,6 @@ LABEL_LIST.append('Mass / Nodule')
 # sample_weights = xray_df['Finding Labels'].map(lambda x: len(x.split('|')) if x != 'No Finding' else 0).values + 0.05
 # sample_weights /= sample_weights.sum()
 # xray_df = xray_df.sample(65000, weights=sample_weights)
-
-label_counts = xray_df['Finding Labels'].value_counts()[:15]
-fig, ax1 = plt.subplots(1, 1, figsize=(12, 8))
-ax1.bar(np.arange(len(label_counts)) + 0.5, label_counts)
-ax1.set_xticks(np.arange(len(label_counts)) + 0.5)
-_ = ax1.set_xticklabels(label_counts.index, rotation=90)
-plt.show()
 
 # 데이터 나누기
 train_df, valid_and_test_df = train_test_split(xray_df, test_size=0.3, random_state=7015)
@@ -122,6 +116,8 @@ elif MODEL == 'DenseNet':
     multi_disease_model.add(DenseNet121(input_shape=(*IMAGE_SIZE, 1), include_top=False, weights=None))
 elif MODEL == 'MobileNet':
     multi_disease_model.add(MobileNet(input_shape=(*IMAGE_SIZE, 1), include_top=False, weights=None))
+elif MODEL == 'InceptionV3':
+    multi_disease_model.add(InceptionV3(input_shape=(*IMAGE_SIZE, 1), include_top=False, weights=None))
 
 multi_disease_model.add(GlobalAveragePooling2D())
 multi_disease_model.add(Dropout(0.3))
