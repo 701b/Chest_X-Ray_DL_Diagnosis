@@ -30,3 +30,28 @@ Download the file and put it in the ```model/``` path.
 
 ### Enter to web
 http://localhost:8080
+
+## Execution sample
+
+![](.README_images/first_page.png)
+
+If you run the web server and enter to it, you will see a screen like the screenshot above.
+You can upload an X-ray image by clicking the attachment icon on the screen.
+
+![](.README_images/upload_sample.png)
+
+When you upload a photo, the uploaded image is displayed as shown in the screenshot above, 
+and the diagnostic button appears. The uploaded image is a chest X-ray image of a patient 
+diagnosed with pneumothorax.
+
+![](.README_images/diagnosing.png)
+
+When you click the diagnosis button, the text stating that it is being diagnosed is displayed 
+as shown in the screenshot above. During this time, the server will analyze the photos through 
+a Python script.
+
+![](.README_images/result.png)
+
+After waiting for a while, if fetches and displays the diagnostic results from the server.
+As shown in the screenshot above, the area of evidence is found and displayed in the image
+along with the diagnosis name.
